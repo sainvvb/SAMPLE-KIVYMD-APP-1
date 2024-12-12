@@ -7,7 +7,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 from kivy.uix.progressbar import ProgressBar
 
-
 class BMSApp(App):
     def build(self):
         # Main layout is BoxLayout to hold title and two sections of grid
