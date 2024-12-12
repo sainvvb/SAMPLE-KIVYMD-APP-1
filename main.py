@@ -13,67 +13,67 @@ class BMSApp(App):
         main_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
         # Title at the top of the screen (centered)
-        title = Label(text='5S1P-BMS', size_hint=(1, 0.1), font_size=40, bold=True)
+        title = Label(text='5S1P-BMS', size_hint=(1, 0.1), font_size=60, bold=True)  # Increased font size
         main_layout.add_widget(title)
 
         # Create additional sections for current, voltage, and temperature
-        self.current_label = Label(text='Voltage (V):', font_size=20, bold=True)
+        self.current_label = Label(text='Voltage (V):', font_size=30, bold=True)  # Increased font size
         self.current_value = TextInput(
             text=str(round(random.uniform(11.5, 14.5), 2)),
             multiline=False,
             readonly=True,  # Make the TextInput read-only (no user input)
-            font_size=30,
+            font_size=40,  # Increased font size
             halign='center',
             font_name='Roboto-Bold',
         )
 
-        self.voltage_label = Label(text='Current (A):', font_size=20, bold=True)
+        self.voltage_label = Label(text='Current (A):', font_size=30, bold=True)  # Increased font size
         self.voltage_value = TextInput(
             text=str(round(random.uniform(0.0, 10.0), 2)),
             multiline=False,
             readonly=True,  # Make the TextInput read-only (no user input)
-            font_size=30,
+            font_size=40,  # Increased font size
             halign='center',
             font_name='Roboto-Bold',
         )
 
-        self.temperature_label = Label(text='Temperature (°C):', font_size=20, bold=True)
+        self.temperature_label = Label(text='Temperature (°C):', font_size=30, bold=True)  # Increased font size
         self.temperature_value = TextInput(
             text=str(round(random.uniform(20.0, 40.0), 2)),
             multiline=False,
             readonly=True,  # Make the TextInput read-only (no user input)
-            font_size=30,
+            font_size=40,  # Increased font size
             halign='center',
             font_name='Roboto-Bold',
         )
 
         # Add these new labels and TextInputs to the main layout
-        current_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
+        current_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
         current_layout.add_widget(self.current_label)
         current_layout.add_widget(self.current_value)
         main_layout.add_widget(current_layout)
 
-        voltage_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
+        voltage_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
         voltage_layout.add_widget(self.voltage_label)
         voltage_layout.add_widget(self.voltage_value)
         main_layout.add_widget(voltage_layout)
 
-        temperature_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
+        temperature_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
         temperature_layout.add_widget(self.temperature_label)
         temperature_layout.add_widget(self.temperature_value)
         main_layout.add_widget(temperature_layout)
 
         # SOC Label and TextInput
-        self.soc_label = Label(text='State of Charge (SOC):', font_size=20, bold=True)
+        self.soc_label = Label(text='State of Charge (SOC):', font_size=30, bold=True)  # Increased font size
         self.soc_value = TextInput(
             text=str(round(random.uniform(0.0, 100.0), 2)) + '%',  # Initial SOC value
             multiline=False,
             readonly=True,  # Make the TextInput read-only (no user input)
-            font_size=30,
+            font_size=40,  # Increased font size
             halign='center',
             font_name='Roboto-Bold',
         )
-        soc_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
+        soc_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
         soc_layout.add_widget(self.soc_label)
         soc_layout.add_widget(self.soc_value)
         main_layout.add_widget(soc_layout)
@@ -83,7 +83,7 @@ class BMSApp(App):
             value=random.uniform(0, 100),  # Initial SOC value
             max=100,
             size_hint=(1, 0.05),
-            height=40,
+            height=50,  # Increased height
         )
         main_layout.add_widget(self.soc_progress_bar)
 
@@ -92,17 +92,17 @@ class BMSApp(App):
         grid_layout = BoxLayout(size_hint=(1, 0.8))
 
         # Create the left section with 7 numerical displays
-        self.left_grid = GridLayout(cols=1, spacing=10, size_hint=(0.65, 1))  # Increased grid size by 30%
+        self.left_grid = GridLayout(cols=1, spacing=10, size_hint=(1.35, 1.35))  # Increased grid size by 50%
         self.left_text_inputs = []
         for i in range(1, 9):  # Starting serial number from 1 for 7 cells
             # Generate random float values between 3.567 and 3.694
             random_value = round(random.uniform(3.567, 3.694), 3)
 
             # Create a horizontal BoxLayout for serial number and text input side by side
-            cell_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=70, spacing=20)
+            cell_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
 
             # Create a label for the serial number
-            serial_label = Label(text=f"Cell {i}", font_size=25, size_hint=(0.2, 1), bold=True)
+            serial_label = Label(text=f"Cell {i}", font_size=50, size_hint=(0.2, 1), bold=True)  # Increased font size
             cell_layout.add_widget(serial_label)
 
             # For each cell, create a TextInput for numerical value (read-only)
@@ -110,7 +110,7 @@ class BMSApp(App):
                 text=str(random_value),
                 multiline=False,
                 readonly=True,  # Make the TextInput read-only (no user input)
-                font_size=40,  # Increased font size for larger grid
+                font_size=50,  # Increased font size for larger grid
                 halign='center',  # Center-align the text inside the TextInput
                 font_name='Roboto-Bold',  # Use a font that supports bold
             )
@@ -121,17 +121,17 @@ class BMSApp(App):
             self.left_grid.add_widget(cell_layout)
 
         # Create the right section with 7 numerical displays
-        self.right_grid = GridLayout(cols=1, spacing=10, size_hint=(0.65, 1))  # Increased grid size by 30%
+        self.right_grid = GridLayout(cols=1, spacing=10, size_hint=(1.35, 1.35))  # Increased grid size by 50%
         self.right_text_inputs = []
         for i in range(9, 17):  # Serial numbers continue from 8 to 14
             # Generate random float values between 3.567 and 3.694
             random_value = round(random.uniform(3.567, 3.694), 3)
 
             # Create a horizontal BoxLayout for serial number and text input side by side
-            cell_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=70, spacing=20)
+            cell_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=105, spacing=20)  # Increased height
 
             # Create a label for the serial number
-            serial_label = Label(text=f"Cell {i}", font_size=25, size_hint=(0.2, 1), bold=True)
+            serial_label = Label(text=f"Cell {i}", font_size=50, size_hint=(0.2, 1), bold=True)  # Increased font size
             cell_layout.add_widget(serial_label)
 
             # For each cell, create a TextInput for numerical value (read-only)
@@ -139,7 +139,7 @@ class BMSApp(App):
                 text=str(random_value),
                 multiline=False,
                 readonly=True,  # Make the TextInput read-only (no user input)
-                font_size=40,  # Increased font size for larger grid
+                font_size=50,  # Increased font size for larger grid
                 halign='center',  # Center-align the text inside the TextInput
                 font_name='Roboto-Bold',  # Use a font that supports bold
             )
