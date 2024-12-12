@@ -89,10 +89,10 @@ class BMSApp(App):
 
         # Create the two sections (7 cells on each side)
         # Use a horizontal layout to position the two grid sections
-        grid_layout = BoxLayout(size_hint=(1, 0.7))
+        grid_layout = BoxLayout(size_hint=(1, 0.7), spacing=20)
 
         # Create the left section with 7 numerical displays
-        self.left_grid = GridLayout(cols=1, spacing=20, size_hint=(0.5, 1))  # Reduced grid width
+        self.left_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1), padding=10)  # Further reduced grid width and added padding
         self.left_text_inputs = []
         for i in range(1, 9):  # Starting serial number from 1 for 7 cells
             # Generate random float values between 3.567 and 3.694
@@ -121,7 +121,7 @@ class BMSApp(App):
             self.left_grid.add_widget(cell_layout)
 
         # Create the right section with 7 numerical displays
-        self.right_grid = GridLayout(cols=1, spacing=20, size_hint=(0.5, 1))  # Reduced grid width
+        self.right_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1), padding=10)  # Further reduced grid width and added padding
         self.right_text_inputs = []
         for i in range(9, 17):  # Serial numbers continue from 8 to 14
             # Generate random float values between 3.567 and 3.694
