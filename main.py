@@ -184,17 +184,35 @@ class BMSApp(App):
         # Create a popup for the menu and store its reference
         menu_content = BoxLayout(orientation='vertical', padding=10)
 
+        # Create a BoxLayout to hold the buttons at the top of the screen
+        buttons_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
+
         # Create menu options
         dashboard_button = Button(text="Dashboard", size_hint_y=None, height=50)
         dashboard_button.bind(on_press=self.show_dashboard)
-        menu_content.add_widget(dashboard_button)
+        buttons_layout.add_widget(dashboard_button)
 
         set_params_button = Button(text="Set Parameters", size_hint_y=None, height=50)
         set_params_button.bind(on_press=self.show_set_params)
-        menu_content.add_widget(set_params_button)
+        buttons_layout.add_widget(set_params_button)
 
-        # Show the popup with the menu options
-        self.menu_popup = Popup(title="Menu", content=menu_content, size_hint=(None, None), size=(400, 300))
+        # Create a ScrollView to accommodate more content below the buttons
+        scroll_content = BoxLayout(orientation='vertical', size_hint_y=0.5)
+        scroll_content.add_widget(Label(text="Additional content or settings can go here"))
+
+        # Add the button layout to the menu content at the top
+        menu_content.add_widget(buttons_layout)
+
+        # Add the scrollable content below the buttons
+        menu_content.add_widget(scroll_content)
+
+        # Show the popup with the menu options (larger size)
+        self.menu_popup = Popup(
+            title="Menu",
+            content=menu_content,
+            size_hint=(None, None),
+            size=(1000, 600)  # Larger size for the menu popup
+        )
         self.menu_popup.open()
 
     def show_dashboard(self, instance):
@@ -202,7 +220,7 @@ class BMSApp(App):
         print("Dashboard selected")
 
     def show_set_params(self, instance):
-        # Create a new popup for setting parameters with reduced size
+        # Create a new popup for setting parameters with larger size
         params_content = BoxLayout(orientation='vertical', padding=10, spacing=15)  # Reduced spacing
 
         # Create a BoxLayout to arrange the title and grid side by side (horizontal orientation)
@@ -212,37 +230,51 @@ class BMSApp(App):
         title_label = Label(text="Set Parameters", font_size=20, size_hint=(None, None), width=200, bold=True)
         top_layout.add_widget(title_label)
 
+        # Add the title layout at the top of the popup
+        params_content.add_widget(top_layout)
+
         # Create a GridLayout to hold the parameters' labels and text inputs
-        grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=350)
+        grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=400)  # Increased height
 
         # Create smaller labels and text inputs for each parameter
+
+        # Move 'Cell No' to the top row
         cell_no_label = Label(text="Cell No", font_size=20)
         cell_no_value = TextInput(text="1", font_size=20, size_hint_y=None, height=40)
 
-        nominal_capacity_label = Label(text="Nominal Capacity (Ah)", font_size=20)
-        nominal_capacity_value = TextInput(text=str(round(random.uniform(50, 100), 2)), font_size=20, size_hint_y=None, height=40)
-
-        over_voltage_label = Label(text="Over Voltage (V)", font_size=20)
-        over_voltage_value = TextInput(text=str(round(random.uniform(13.0, 15.0), 2)), font_size=20, size_hint_y=None, height=40)
-
-        over_voltage_release_label = Label(text="Over Voltage Release (V)", font_size=20)
-        over_voltage_release_value = TextInput(text=str(round(random.uniform(12.5, 14.5), 2)), font_size=20, size_hint_y=None, height=40)
-
-        under_voltage_label = Label(text="Under Voltage (V)", font_size=20)
-        under_voltage_value = TextInput(text=str(round(random.uniform(10.0, 12.0), 2)), font_size=20, size_hint_y=None, height=40)
-
-        over_temperature_label = Label(text="Over Temperature (°C)", font_size=20)
-        over_temperature_value = TextInput(text=str(round(random.uniform(45.0, 60.0), 2)), font_size=20, size_hint_y=None, height=40)
-
-        over_temperature_release_label = Label(text="Over Temperature Release (°C)", font_size=20)
-        over_temperature_release_value = TextInput(text=str(round(random.uniform(35.0, 50.0), 2)), font_size=20, size_hint_y=None, height=40)
-
-        over_current_label = Label(text="Over Current (A)", font_size=20)
-        over_current_value = TextInput(text=str(round(random.uniform(20.0, 40.0), 2)), font_size=20, size_hint_y=None, height=40)
-
-        # Add widgets to the grid_layout
+        # Add 'Cell No' as the first row in the grid
         grid_layout.add_widget(cell_no_label)
         grid_layout.add_widget(cell_no_value)
+
+        # Add the rest of the parameters after 'Cell No'
+        nominal_capacity_label = Label(text="Nominal Capacity (Ah)", font_size=20)
+        nominal_capacity_value = TextInput(text=str(round(random.uniform(50, 100), 2)), font_size=20, size_hint_y=None,
+                                           height=40)
+
+        over_voltage_label = Label(text="Over Voltage (V)", font_size=20)
+        over_voltage_value = TextInput(text=str(round(random.uniform(13.0, 15.0), 2)), font_size=20, size_hint_y=None,
+                                       height=40)
+
+        over_voltage_release_label = Label(text="Over Voltage Release (V)", font_size=20)
+        over_voltage_release_value = TextInput(text=str(round(random.uniform(12.5, 14.5), 2)), font_size=20,
+                                               size_hint_y=None, height=40)
+
+        under_voltage_label = Label(text="Under Voltage (V)", font_size=20)
+        under_voltage_value = TextInput(text=str(round(random.uniform(10.0, 12.0), 2)), font_size=20, size_hint_y=None,
+                                        height=40)
+
+        over_temperature_label = Label(text="Over Temperature (°C)", font_size=20)
+        over_temperature_value = TextInput(text=str(round(random.uniform(45.0, 60.0), 2)), font_size=20,
+                                           size_hint_y=None, height=40)
+
+        over_temperature_release_label = Label(text="Over Temperature Release (°C)", font_size=20)
+        over_temperature_release_value = TextInput(text=str(round(random.uniform(35.0, 50.0), 2)), font_size=20,
+                                                   size_hint_y=None, height=40)
+
+        over_current_label = Label(text="Over Current (A)", font_size=20)
+        over_current_value = TextInput(text=str(round(random.uniform(20.0, 40.0), 2)), font_size=20, size_hint_y=None,
+                                       height=40)
+
         grid_layout.add_widget(nominal_capacity_label)
         grid_layout.add_widget(nominal_capacity_value)
         grid_layout.add_widget(over_voltage_label)
@@ -258,42 +290,25 @@ class BMSApp(App):
         grid_layout.add_widget(over_current_label)
         grid_layout.add_widget(over_current_value)
 
-        # Add both the title and the grid layout to the params_content BoxLayout
-        params_content.add_widget(top_layout)
+        # Add the grid layout to the params content
         params_content.add_widget(grid_layout)
 
-        # Save button with a reduced size
-        save_button = Button(text="Save", size_hint_y=None, height=40)
-        save_button.bind(on_press=lambda x: self.save_params(x, nominal_capacity_value, over_voltage_value,
-                                                             over_voltage_release_value, under_voltage_value,
-                                                             over_temperature_value, over_temperature_release_value,
-                                                             over_current_value))
-        params_content.add_widget(save_button)
-
-        # Show the popup for setting parameters
-        self.params_popup = Popup(title="Set Parameters", content=params_content, size_hint=(None, None),
-                                  size=(400, 500))  # Reduced size of the popup
+        # Show the popup with the parameter setting content (larger size)
+        self.params_popup = Popup(
+            title="Set Parameters",
+            content=params_content,
+            size_hint=(None, None),
+            size=(900, 700)  # Larger size for parameter setting popup
+        )
         self.params_popup.open()
 
-    def save_params(self, instance, nominal_capacity_value, over_voltage_value, over_voltage_release_value,
-                    under_voltage_value, over_temperature_value, over_temperature_release_value, over_current_value):
-        print(f"Parameters saved: \nNominal Capacity: {nominal_capacity_value.text}\n"
-              f"Over Voltage: {over_voltage_value.text}\nOver Voltage Release: {over_voltage_release_value.text}\n"
-              f"Under Voltage: {under_voltage_value.text}\nOver Temperature: {over_temperature_value.text}\n"
-              f"Over Temperature Release: {over_temperature_release_value.text}\nOver Current: {over_current_value.text}")
-
-
     def update_values(self, dt):
-        # Randomly update values for current, voltage, temperature, SOC, and cells
-        self.current_value.text = str(round(random.uniform(0.0, 10.0), 2))
-        self.voltage_value.text = str(round(random.uniform(11.5, 14.5), 2))
+        # Update random values every second
+        self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
+        self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
-        self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + '%'
-        self.soc_progress_bar.value = float(self.soc_value.text[:-1])  # Remove '%' and update progress
-
-        for i in range(len(self.left_text_inputs)):
-            self.left_text_inputs[i].text = str(round(random.uniform(3.567, 3.694), 3))
-            self.right_text_inputs[i].text = str(round(random.uniform(3.567, 3.694), 3))
+        self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + "%"
+        self.soc_progress_bar.value = random.uniform(0, 100)
 
 
 if __name__ == "__main__":
