@@ -211,13 +211,9 @@ class BMSApp(App):
             title="Menu",
             content=menu_content,
             size_hint=(None, None),
-            size=(1000, 600)  # Larger size for the menu popup
+            size=(2400, 1600)  # Increased size by 200%
         )
         self.menu_popup.open()
-
-    def show_dashboard(self, instance):
-        # Placeholder for the Dashboard action
-        print("Dashboard selected")
 
     def show_set_params(self, instance):
         # Create a new popup for setting parameters with larger size
@@ -298,7 +294,7 @@ class BMSApp(App):
             title="Set Parameters",
             content=params_content,
             size_hint=(None, None),
-            size=(900, 700)  # Larger size for parameter setting popup
+            size=(2400, 1800)  # Increased size by 200%
         )
         self.params_popup.open()
 
@@ -307,9 +303,12 @@ class BMSApp(App):
         self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
         self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
-        self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + "%"
-        self.soc_progress_bar.value = random.uniform(0, 100)
+
+        # Update State of Charge (SOC)
+        new_soc = round(random.uniform(0.0, 100.0), 2)
+        self.soc_value.text = str(new_soc) + '%'
+        self.soc_progress_bar.value = new_soc
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     BMSApp().run()
