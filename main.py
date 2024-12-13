@@ -1,4 +1,3 @@
-import random
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -6,15 +5,33 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.slider import Slider
+import random
+
 
 class BMSApp(App):
     def build(self):
         # Main layout is BoxLayout to hold title and two sections of grid
         main_layout = BoxLayout(orientation='vertical', padding=10, spacing=20)
 
+        # Create the top layout to include the menu button and title
+        top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=20)
+
+        # Menu Button on the left
+        menu_button = Button(
+            text="Menu", size_hint=(None, None), size=(100, 50), font_size=30,
+            background_color=(0.2, 0.6, 1, 1), bold=True
+        )
+        menu_button.bind(on_press=self.show_menu)
+        top_layout.add_widget(menu_button)
+
         # Title at the top of the screen (centered)
         title = Label(text='5S1P-BMS', size_hint=(1, 0.1), font_size=80, bold=True)
-        main_layout.add_widget(title)
+        top_layout.add_widget(title)
+
+        main_layout.add_widget(top_layout)
 
         # Create additional sections for current, voltage, and temperature
         self.current_label = Label(text='Voltage (V):', font_size=40, bold=True)
@@ -92,7 +109,8 @@ class BMSApp(App):
         grid_layout = BoxLayout(size_hint=(1, 0.7), spacing=20)
 
         # Create the left section with 7 numerical displays
-        self.left_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1), padding=10)  # Further reduced grid width and added padding
+        self.left_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1),
+                                    padding=10)  # Further reduced grid width and added padding
         self.left_text_inputs = []
         for i in range(1, 9):  # Starting serial number from 1 for 7 cells
             # Generate random float values between 3.567 and 3.694
@@ -121,7 +139,8 @@ class BMSApp(App):
             self.left_grid.add_widget(cell_layout)
 
         # Create the right section with 7 numerical displays
-        self.right_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1), padding=10)  # Further reduced grid width and added padding
+        self.right_grid = GridLayout(cols=1, spacing=20, size_hint=(0.4, 1),
+                                     padding=10)  # Further reduced grid width and added padding
         self.right_text_inputs = []
         for i in range(9, 17):  # Serial numbers continue from 8 to 14
             # Generate random float values between 3.567 and 3.694
@@ -161,31 +180,121 @@ class BMSApp(App):
 
         return main_layout
 
+    def show_menu(self, instance):
+        # Create a popup for the menu and store its reference
+        menu_content = BoxLayout(orientation='vertical', padding=10)
+
+        # Create menu options
+        dashboard_button = Button(text="Dashboard", size_hint_y=None, height=50)
+        dashboard_button.bind(on_press=self.show_dashboard)
+        menu_content.add_widget(dashboard_button)
+
+        set_params_button = Button(text="Set Parameters", size_hint_y=None, height=50)
+        set_params_button.bind(on_press=self.show_set_params)
+        menu_content.add_widget(set_params_button)
+
+        # Show the popup with the menu options
+        self.menu_popup = Popup(title="Menu", content=menu_content, size_hint=(None, None), size=(400, 300))
+        self.menu_popup.open()
+
+    def show_dashboard(self, instance):
+        # Placeholder for the Dashboard action
+        print("Dashboard selected")
+
+    def show_set_params(self, instance):
+        # Create a new popup for setting parameters with reduced size
+        params_content = BoxLayout(orientation='vertical', padding=10, spacing=15)  # Reduced spacing
+
+        # Create a BoxLayout to arrange the title and grid side by side (horizontal orientation)
+        top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
+
+        # Title for the Set Parameters
+        title_label = Label(text="Set Parameters", font_size=20, size_hint=(None, None), width=200, bold=True)
+        top_layout.add_widget(title_label)
+
+        # Create a GridLayout to hold the parameters' labels and text inputs
+        grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=350)
+
+        # Create smaller labels and text inputs for each parameter
+        cell_no_label = Label(text="Cell No", font_size=20)
+        cell_no_value = TextInput(text="1", font_size=20, size_hint_y=None, height=40)
+
+        nominal_capacity_label = Label(text="Nominal Capacity (Ah)", font_size=20)
+        nominal_capacity_value = TextInput(text=str(round(random.uniform(50, 100), 2)), font_size=20, size_hint_y=None, height=40)
+
+        over_voltage_label = Label(text="Over Voltage (V)", font_size=20)
+        over_voltage_value = TextInput(text=str(round(random.uniform(13.0, 15.0), 2)), font_size=20, size_hint_y=None, height=40)
+
+        over_voltage_release_label = Label(text="Over Voltage Release (V)", font_size=20)
+        over_voltage_release_value = TextInput(text=str(round(random.uniform(12.5, 14.5), 2)), font_size=20, size_hint_y=None, height=40)
+
+        under_voltage_label = Label(text="Under Voltage (V)", font_size=20)
+        under_voltage_value = TextInput(text=str(round(random.uniform(10.0, 12.0), 2)), font_size=20, size_hint_y=None, height=40)
+
+        over_temperature_label = Label(text="Over Temperature (°C)", font_size=20)
+        over_temperature_value = TextInput(text=str(round(random.uniform(45.0, 60.0), 2)), font_size=20, size_hint_y=None, height=40)
+
+        over_temperature_release_label = Label(text="Over Temperature Release (°C)", font_size=20)
+        over_temperature_release_value = TextInput(text=str(round(random.uniform(35.0, 50.0), 2)), font_size=20, size_hint_y=None, height=40)
+
+        over_current_label = Label(text="Over Current (A)", font_size=20)
+        over_current_value = TextInput(text=str(round(random.uniform(20.0, 40.0), 2)), font_size=20, size_hint_y=None, height=40)
+
+        # Add widgets to the grid_layout
+        grid_layout.add_widget(cell_no_label)
+        grid_layout.add_widget(cell_no_value)
+        grid_layout.add_widget(nominal_capacity_label)
+        grid_layout.add_widget(nominal_capacity_value)
+        grid_layout.add_widget(over_voltage_label)
+        grid_layout.add_widget(over_voltage_value)
+        grid_layout.add_widget(over_voltage_release_label)
+        grid_layout.add_widget(over_voltage_release_value)
+        grid_layout.add_widget(under_voltage_label)
+        grid_layout.add_widget(under_voltage_value)
+        grid_layout.add_widget(over_temperature_label)
+        grid_layout.add_widget(over_temperature_value)
+        grid_layout.add_widget(over_temperature_release_label)
+        grid_layout.add_widget(over_temperature_release_value)
+        grid_layout.add_widget(over_current_label)
+        grid_layout.add_widget(over_current_value)
+
+        # Add both the title and the grid layout to the params_content BoxLayout
+        params_content.add_widget(top_layout)
+        params_content.add_widget(grid_layout)
+
+        # Save button with a reduced size
+        save_button = Button(text="Save", size_hint_y=None, height=40)
+        save_button.bind(on_press=lambda x: self.save_params(x, nominal_capacity_value, over_voltage_value,
+                                                             over_voltage_release_value, under_voltage_value,
+                                                             over_temperature_value, over_temperature_release_value,
+                                                             over_current_value))
+        params_content.add_widget(save_button)
+
+        # Show the popup for setting parameters
+        self.params_popup = Popup(title="Set Parameters", content=params_content, size_hint=(None, None),
+                                  size=(400, 500))  # Reduced size of the popup
+        self.params_popup.open()
+
+    def save_params(self, instance, nominal_capacity_value, over_voltage_value, over_voltage_release_value,
+                    under_voltage_value, over_temperature_value, over_temperature_release_value, over_current_value):
+        print(f"Parameters saved: \nNominal Capacity: {nominal_capacity_value.text}\n"
+              f"Over Voltage: {over_voltage_value.text}\nOver Voltage Release: {over_voltage_release_value.text}\n"
+              f"Under Voltage: {under_voltage_value.text}\nOver Temperature: {over_temperature_value.text}\n"
+              f"Over Temperature Release: {over_temperature_release_value.text}\nOver Current: {over_current_value.text}")
+
+
     def update_values(self, dt):
-        # Update the random values for left grid (even though they are read-only)
-        for text_input in self.left_text_inputs:
-            new_value = round(random.uniform(3.567, 3.694), 3)
-            text_input.text = str(new_value)
-
-        # Update the random values for right grid (even though they are read-only)
-        for text_input in self.right_text_inputs:
-            new_value = round(random.uniform(3.567, 3.694), 3)
-            text_input.text = str(new_value)
-
-        # Update the current value
+        # Randomly update values for current, voltage, temperature, SOC, and cells
         self.current_value.text = str(round(random.uniform(0.0, 10.0), 2))
-
-        # Update the voltage value
         self.voltage_value.text = str(round(random.uniform(11.5, 14.5), 2))
-
-        # Update the temperature value
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
+        self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + '%'
+        self.soc_progress_bar.value = float(self.soc_value.text[:-1])  # Remove '%' and update progress
 
-        # Update the SOC value (both text and progress bar)
-        soc_value = round(random.uniform(0.0, 100.0), 2)
-        self.soc_value.text = str(soc_value) + '%'
-        self.soc_progress_bar.value = soc_value
+        for i in range(len(self.left_text_inputs)):
+            self.left_text_inputs[i].text = str(round(random.uniform(3.567, 3.694), 3))
+            self.right_text_inputs[i].text = str(round(random.uniform(3.567, 3.694), 3))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BMSApp().run()
