@@ -33,10 +33,6 @@ class BMSApp(App):
 
         main_layout.add_widget(top_layout)
 
-        # Add an empty widget to create space between title and voltage
-        spacing_widget = BoxLayout(size_hint_y=None, height=50)  # Adjust height for desired space
-        main_layout.add_widget(spacing_widget)
-
         # Create additional sections for current, voltage, and temperature
         self.current_label = Label(text='Voltage (V):', font_size=40, bold=True)
         self.current_value = TextInput(
@@ -210,17 +206,17 @@ class BMSApp(App):
         # Add the scrollable content below the buttons
         menu_content.add_widget(scroll_content)
 
-        # Show the popup with the menu options (halved size)
+        # Show the popup with the menu options (larger size)
         self.menu_popup = Popup(
             title="Menu",
             content=menu_content,
             size_hint=(None, None),
-            size=(3000, 2000)  # Halved size
+            size=(2400, 1600)  # Increased size by 200%
         )
         self.menu_popup.open()
 
     def show_set_params(self, instance):
-        # Create a new popup for setting parameters with smaller size
+        # Create a new popup for setting parameters with larger size
         params_content = BoxLayout(orientation='vertical', padding=10, spacing=15)  # Reduced spacing
 
         # Create a BoxLayout to arrange the title and grid side by side (horizontal orientation)
@@ -237,6 +233,8 @@ class BMSApp(App):
         grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=400)  # Increased height
 
         # Create smaller labels and text inputs for each parameter
+
+        # Move 'Cell No' to the top row
         cell_no_label = Label(text="Cell No", font_size=20)
         cell_no_value = TextInput(text="1", font_size=20, size_hint_y=None, height=40)
 
@@ -291,30 +289,25 @@ class BMSApp(App):
         # Add the grid layout to the params content
         params_content.add_widget(grid_layout)
 
-        # Show the popup with the parameter setting content (halved size)
+        # Show the popup with the parameter setting content (larger size)
         self.params_popup = Popup(
             title="Set Parameters",
             content=params_content,
             size_hint=(None, None),
-            size=(3000, 2250)  # Halved size
+            size=(2400, 1800)  # Increased size by 200%
         )
         self.params_popup.open()
 
     def update_values(self, dt):
-        # Randomly update the text values for voltage, current, temperature, etc.
+        # Update random values every second
         self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
         self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
-        self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + '%'
-        self.soc_progress_bar.value = random.uniform(0, 100)
-        
-        # Randomly update the values of cells in the grid
-        for i in range(16):
-            new_value = round(random.uniform(3.567, 3.694), 3)
-            if i < 8:
-                self.left_text_inputs[i].text = str(new_value)
-            else:
-                self.right_text_inputs[i-8].text = str(new_value)
+
+        # Update State of Charge (SOC)
+        new_soc = round(random.uniform(0.0, 100.0), 2)
+        self.soc_value.text = str(new_soc) + '%'
+        self.soc_progress_bar.value = new_soc
 
 
 if __name__ == '__main__':
