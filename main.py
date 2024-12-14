@@ -19,12 +19,8 @@ class BMSApp(App):
         # Create the top layout to include the menu button and title
         top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=20)
 
-        # Menu Button on the left
-        menu_button = Button(
-            text="Menu", size_hint=(None, None), size=(100, 50), font_size=30,
-            background_color=(0.2, 0.6, 1, 1), bold=True
-        )
-        menu_button.bind(on_press=self.show_menu)
+        # Menu button that will open the popup
+        menu_button = Button(text='Menu', size_hint=(None, None), size=(100, 50), font_size=30, on_press=self.open_menu)
         top_layout.add_widget(menu_button)
 
         # Title at the top of the screen (centered)
@@ -33,7 +29,10 @@ class BMSApp(App):
 
         main_layout.add_widget(top_layout)
 
-        # Create additional sections for current, voltage, and temperature
+        # Add a BoxLayout with a fixed height to add space between the title and voltage section
+        main_layout.add_widget(BoxLayout(size_hint_y=None, height=50))  # Adjust height to control the gap
+
+        # Create additional sections for voltage, current, and temperature
         self.current_label = Label(text='Voltage (V):', font_size=40, bold=True)
         self.current_value = TextInput(
             text=str(round(random.uniform(11.5, 14.5), 2)),
@@ -180,124 +179,6 @@ class BMSApp(App):
 
         return main_layout
 
-    def show_menu(self, instance):
-        # Create a popup for the menu and store its reference
-        menu_content = BoxLayout(orientation='vertical', padding=10)
-
-        # Create a BoxLayout to hold the buttons at the top of the screen
-        buttons_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=20)
-
-        # Create menu options
-        dashboard_button = Button(text="Dashboard", size_hint_y=None, height=50)
-        dashboard_button.bind(on_press=self.show_dashboard)
-        buttons_layout.add_widget(dashboard_button)
-
-        set_params_button = Button(text="Set Parameters", size_hint_y=None, height=50)
-        set_params_button.bind(on_press=self.show_set_params)
-        buttons_layout.add_widget(set_params_button)
-
-        # Create a ScrollView to accommodate more content below the buttons
-        scroll_content = BoxLayout(orientation='vertical', size_hint_y=0.5)
-        scroll_content.add_widget(Label(text="Additional content or settings can go here"))
-
-        # Add the button layout to the menu content at the top
-        menu_content.add_widget(buttons_layout)
-
-        # Add the scrollable content below the buttons
-        menu_content.add_widget(scroll_content)
-
-        # Show the popup with the menu options (larger size)
-        self.menu_popup = Popup(
-            title="Menu",
-            content=menu_content,
-            size_hint=(None, None),
-            size=(2400, 1600)  # Increased size by 200%
-        )
-        self.menu_popup.open()
-
-    def show_set_params(self, instance):
-        # Create a new popup for setting parameters with larger size
-        params_content = BoxLayout(orientation='vertical', padding=10, spacing=15)  # Reduced spacing
-
-        # Create a BoxLayout to arrange the title and grid side by side (horizontal orientation)
-        top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
-
-        # Title for the Set Parameters
-        title_label = Label(text="Set Parameters", font_size=20, size_hint=(None, None), width=200, bold=True)
-        top_layout.add_widget(title_label)
-
-        # Add the title layout at the top of the popup
-        params_content.add_widget(top_layout)
-
-        # Create a GridLayout to hold the parameters' labels and text inputs
-        grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=400)  # Increased height
-
-        # Create smaller labels and text inputs for each parameter
-
-        # Move 'Cell No' to the top row
-        cell_no_label = Label(text="Cell No", font_size=20)
-        cell_no_value = TextInput(text="1", font_size=20, size_hint_y=None, height=40)
-
-        # Add 'Cell No' as the first row in the grid
-        grid_layout.add_widget(cell_no_label)
-        grid_layout.add_widget(cell_no_value)
-
-        # Add the rest of the parameters after 'Cell No'
-        nominal_capacity_label = Label(text="Nominal Capacity (Ah)", font_size=20)
-        nominal_capacity_value = TextInput(text=str(round(random.uniform(50, 100), 2)), font_size=20, size_hint_y=None,
-                                           height=40)
-
-        over_voltage_label = Label(text="Over Voltage (V)", font_size=20)
-        over_voltage_value = TextInput(text=str(round(random.uniform(13.0, 15.0), 2)), font_size=20, size_hint_y=None,
-                                       height=40)
-
-        over_voltage_release_label = Label(text="Over Voltage Release (V)", font_size=20)
-        over_voltage_release_value = TextInput(text=str(round(random.uniform(12.5, 14.5), 2)), font_size=20,
-                                               size_hint_y=None, height=40)
-
-        under_voltage_label = Label(text="Under Voltage (V)", font_size=20)
-        under_voltage_value = TextInput(text=str(round(random.uniform(10.0, 12.0), 2)), font_size=20, size_hint_y=None,
-                                        height=40)
-
-        over_temperature_label = Label(text="Over Temperature (°C)", font_size=20)
-        over_temperature_value = TextInput(text=str(round(random.uniform(45.0, 60.0), 2)), font_size=20,
-                                           size_hint_y=None, height=40)
-
-        over_temperature_release_label = Label(text="Over Temperature Release (°C)", font_size=20)
-        over_temperature_release_value = TextInput(text=str(round(random.uniform(35.0, 50.0), 2)), font_size=20,
-                                                   size_hint_y=None, height=40)
-
-        over_current_label = Label(text="Over Current (A)", font_size=20)
-        over_current_value = TextInput(text=str(round(random.uniform(20.0, 40.0), 2)), font_size=20, size_hint_y=None,
-                                       height=40)
-
-        grid_layout.add_widget(nominal_capacity_label)
-        grid_layout.add_widget(nominal_capacity_value)
-        grid_layout.add_widget(over_voltage_label)
-        grid_layout.add_widget(over_voltage_value)
-        grid_layout.add_widget(over_voltage_release_label)
-        grid_layout.add_widget(over_voltage_release_value)
-        grid_layout.add_widget(under_voltage_label)
-        grid_layout.add_widget(under_voltage_value)
-        grid_layout.add_widget(over_temperature_label)
-        grid_layout.add_widget(over_temperature_value)
-        grid_layout.add_widget(over_temperature_release_label)
-        grid_layout.add_widget(over_temperature_release_value)
-        grid_layout.add_widget(over_current_label)
-        grid_layout.add_widget(over_current_value)
-
-        # Add the grid layout to the params content
-        params_content.add_widget(grid_layout)
-
-        # Show the popup with the parameter setting content (larger size)
-        self.params_popup = Popup(
-            title="Set Parameters",
-            content=params_content,
-            size_hint=(None, None),
-            size=(2400, 1800)  # Increased size by 200%
-        )
-        self.params_popup.open()
-
     def update_values(self, dt):
         # Update random values every second
         self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
@@ -309,6 +190,82 @@ class BMSApp(App):
         self.soc_value.text = str(new_soc) + '%'
         self.soc_progress_bar.value = new_soc
 
+    def open_menu(self, instance):
+        # Create the menu layout with buttons
+        menu_layout = BoxLayout(orientation='vertical', spacing=20, padding=20)
 
+        # Button for opening the Dashboard
+        dashboard_button = Button(text="Dashboard", size_hint=(1, 0.5), height=50, on_press=self.show_dashboard)
+        menu_layout.add_widget(dashboard_button)
+
+        # Button for setting parameters
+        set_parameters_button = Button(text="Set Parameters", size_hint=(1, 0.5), height=50, on_press=self.show_set_parameters)
+        menu_layout.add_widget(set_parameters_button)
+
+        # Close Button to close the menu popup
+        close_button = Button(text="Close", size_hint=(1, 0.5), height=50, on_press=self.close_menu)
+        menu_layout.add_widget(close_button)
+
+        # Create the popup with the menu layout
+        self.popup = Popup(title="Menu", content=menu_layout, size_hint=(None, None), size=(300, 400))
+        self.popup.open()
+
+    def close_menu(self, instance):
+        # Close the popup
+        self.popup.dismiss()
+
+    def show_dashboard(self, instance):
+        # Handle dashboard button press (you can implement your dashboard logic here)
+        print("Dashboard clicked")
+
+    def show_set_parameters(self, instance):
+        # Create the layout for setting parameters
+        parameter_layout = BoxLayout(orientation='vertical', spacing=20, padding=20)
+
+        # Create a horizontal layout for each parameter (label + input field)
+        def create_param_layout(label_text, input_field):
+            param_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=10)
+            label = Label(text=label_text, font_size=30, size_hint=(0.4, 1), bold=True)
+            param_layout.add_widget(label)
+            param_layout.add_widget(input_field)
+            return param_layout
+
+        # Add input fields for setting parameters
+        self.cell_no_input = TextInput(text="1", font_size=30, hint_text="Cell No", multiline=False)
+        self.nominal_capacity_input = TextInput(text="100.0", font_size=30, hint_text="Nominal Capacity (Ah)", multiline=False)
+        self.over_voltage_input = TextInput(text="4.2", font_size=30, hint_text="Over Voltage (V)", multiline=False)
+        self.over_voltage_release_input = TextInput(text="4.0", font_size=30, hint_text="Over Voltage Release (V)", multiline=False)
+        self.under_voltage_input = TextInput(text="3.0", font_size=30, hint_text="Under Voltage (V)", multiline=False)
+        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V)", multiline=False)
+        self.over_temperature_input = TextInput(text="60", font_size=30, hint_text="Over Temperature (°C)", multiline=False)
+        self.over_temperature_release_input = TextInput(text="55", font_size=30, hint_text="Over Temperature Release (°C)", multiline=False)
+        self.over_current_input = TextInput(text="10.0", font_size=30, hint_text="Over Current (A)", multiline=False)
+        self.over_current_release_input = TextInput(text="9.0", font_size=30, hint_text="Over Current Release (A)", multiline=False)
+
+        # Add each parameter to the parameter layout with labels on the left
+        parameter_layout.add_widget(create_param_layout("Cell No", self.cell_no_input))
+        parameter_layout.add_widget(create_param_layout("Nominal Capacity (Ah)", self.nominal_capacity_input))
+        parameter_layout.add_widget(create_param_layout("Over Voltage (V)", self.over_voltage_input))
+        parameter_layout.add_widget(create_param_layout("Over Voltage Release (V)", self.over_voltage_release_input))
+        parameter_layout.add_widget(create_param_layout("Under Voltage (V)", self.under_voltage_input))
+        parameter_layout.add_widget(create_param_layout("Under Voltage Release (V)", self.under_voltage_release_input))
+        parameter_layout.add_widget(create_param_layout("Over Temperature (°C)", self.over_temperature_input))
+        parameter_layout.add_widget(create_param_layout("Over Temperature Release (°C)", self.over_temperature_release_input))
+        parameter_layout.add_widget(create_param_layout("Over Current (A)", self.over_current_input))
+        parameter_layout.add_widget(create_param_layout("Over Current Release (A)", self.over_current_release_input))
+
+        # Button to confirm the settings
+        save_button = Button(text="Save Parameters", size_hint=(1, 0.2), on_press=self.save_parameters)
+        parameter_layout.add_widget(save_button)
+
+        # Create the popup for setting parameters
+        self.set_parameters_popup = Popup(title="Set Parameters", content=parameter_layout, size_hint=(None, None), size=(1000, 600))
+        self.set_parameters_popup.open()
+
+    def save_parameters(self, instance):
+        # Implement saving functionality here
+        print("Parameters saved")
+
+# Run the app
 if __name__ == '__main__':
     BMSApp().run()
