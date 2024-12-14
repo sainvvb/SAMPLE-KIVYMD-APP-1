@@ -216,7 +216,7 @@ class BMSApp(App):
         menu_layout.add_widget(close_button)
 
         # Create the popup with the menu layout
-        self.popup = Popup(title="Menu", content=menu_layout, size_hint=(None, None), size=(300, 400))
+        self.popup = Popup(title="Menu", content=menu_layout, size_hint=(None, None), size=(1000, 1500))
         self.popup.open()
 
     def close_menu(self, instance):
@@ -273,7 +273,7 @@ class BMSApp(App):
             title="Set Parameters",
             content=parameter_layout,
             size_hint=(None, None),
-            size=(2000, 1000)  # Reduced the overall width and height of the popup window
+            size=(800, 600)  # Reduced the overall width and height of the popup window
         )
         self.set_parameters_popup.open()
 
