@@ -234,9 +234,9 @@ class BMSApp(App):
         # Create a horizontal layout for each parameter (label + input field)
         def create_param_layout(label_text, input_field):
             param_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=10)
-            label = Label(text=label_text, font_size=30, size_hint=(0.3, 1), bold=True)  # Reduced label width
+            label = Label(text=label_text, font_size=30, size_hint=(0.3, 0.5), bold=True)  # Reduced label width
             param_layout.add_widget(label)
-            input_field.size_hint_x = 0.6  # Reduced width for input field (adjust as needed)
+            input_field.size_hint_x = 0.5  # Reduced width for input field (adjust as needed)
             param_layout.add_widget(input_field)
             return param_layout
 
@@ -273,7 +273,7 @@ class BMSApp(App):
             title="Set Parameters",
             content=parameter_layout,
             size_hint=(None, None),
-            size=(800, 600)  # Reduced the overall width and height of the popup window
+            size=(900, 1000)  # Reduced the overall width and height of the popup window
         )
         self.set_parameters_popup.open()
 
