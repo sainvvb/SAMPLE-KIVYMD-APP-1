@@ -215,7 +215,7 @@ class BMSApp(App):
             title="Menu",
             content=menu_content,
             size_hint=(None, None),
-            size=(6000, 4000)  # Halved size
+            size=(3000, 2000)  # Halved size
         )
         self.menu_popup.open()
 
@@ -296,17 +296,25 @@ class BMSApp(App):
             title="Set Parameters",
             content=params_content,
             size_hint=(None, None),
-            size=(6000, 4500)  # Halved size
+            size=(3000, 2250)  # Halved size
         )
         self.params_popup.open()
 
     def update_values(self, dt):
-        # Update values every second (for demonstration purposes)
+        # Randomly update the text values for voltage, current, temperature, etc.
         self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
         self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
         self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + '%'
-        self.soc_progress_bar.value = random.uniform(0, 100)  # Update the SOC progress bar
+        self.soc_progress_bar.value = random.uniform(0, 100)
+        
+        # Randomly update the values of cells in the grid
+        for i in range(16):
+            new_value = round(random.uniform(3.567, 3.694), 3)
+            if i < 8:
+                self.left_text_inputs[i].text = str(new_value)
+            else:
+                self.right_text_inputs[i-8].text = str(new_value)
 
 
 if __name__ == '__main__':
