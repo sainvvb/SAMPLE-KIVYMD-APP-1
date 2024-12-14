@@ -210,17 +210,17 @@ class BMSApp(App):
         # Add the scrollable content below the buttons
         menu_content.add_widget(scroll_content)
 
-        # Show the popup with the menu options (increased size by 5 times)
+        # Show the popup with the menu options (halved size)
         self.menu_popup = Popup(
             title="Menu",
             content=menu_content,
             size_hint=(None, None),
-            size=(12000, 8000)  # Increased size by 5 times
+            size=(6000, 4000)  # Halved size
         )
         self.menu_popup.open()
 
     def show_set_params(self, instance):
-        # Create a new popup for setting parameters with larger size
+        # Create a new popup for setting parameters with smaller size
         params_content = BoxLayout(orientation='vertical', padding=10, spacing=15)  # Reduced spacing
 
         # Create a BoxLayout to arrange the title and grid side by side (horizontal orientation)
@@ -237,8 +237,6 @@ class BMSApp(App):
         grid_layout = GridLayout(cols=2, spacing=10, size_hint=(1, None), height=400)  # Increased height
 
         # Create smaller labels and text inputs for each parameter
-
-        # Move 'Cell No' to the top row
         cell_no_label = Label(text="Cell No", font_size=20)
         cell_no_value = TextInput(text="1", font_size=20, size_hint_y=None, height=40)
 
@@ -293,22 +291,22 @@ class BMSApp(App):
         # Add the grid layout to the params content
         params_content.add_widget(grid_layout)
 
-        # Show the popup with the parameter setting content (increased size by 5 times)
+        # Show the popup with the parameter setting content (halved size)
         self.params_popup = Popup(
             title="Set Parameters",
             content=params_content,
             size_hint=(None, None),
-            size=(12000, 9000)  # Increased size by 5 times
+            size=(6000, 4500)  # Halved size
         )
         self.params_popup.open()
 
     def update_values(self, dt):
-        # Update the random values every second for simulation
+        # Update values every second (for demonstration purposes)
         self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
         self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
         self.soc_value.text = str(round(random.uniform(0.0, 100.0), 2)) + '%'
-        self.soc_progress_bar.value = random.uniform(0, 100)
+        self.soc_progress_bar.value = random.uniform(0, 100)  # Update the SOC progress bar
 
 
 if __name__ == '__main__':
