@@ -20,7 +20,8 @@ class BMSApp(App):
         top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=20)
 
         # Menu button that will open the popup
-        menu_button = Button(text='Menu', size_hint=(None, None), size=(100, 50), font_size=30, on_press=self.open_menu)
+        menu_button = Button(text='Menu', size_hint=(None, None), size=(200, 150), font_size=50,
+                             on_press=self.open_menu)
         top_layout.add_widget(menu_button)
 
         # Title at the top of the screen (centered)
@@ -35,7 +36,7 @@ class BMSApp(App):
         # Create additional sections for voltage, current, and temperature
         self.current_label = Label(text='Voltage (V):', font_size=40, bold=True)
         self.current_value = TextInput(
-            text=str(round(random.uniform(11.5, 14.5), 2)),
+            text=str(round(random.uniform(57, 60), 2)),  # Initial voltage value between 57 and 60
             multiline=False,
             readonly=True,  # Make the TextInput read-only (no user input)
             font_size=70,
@@ -181,7 +182,7 @@ class BMSApp(App):
 
     def update_values(self, dt):
         # Update random values every second
-        self.current_value.text = str(round(random.uniform(11.5, 14.5), 2))
+        self.current_value.text = str(round(random.uniform(57, 60), 2))  # Voltage range between 57 and 60
         self.voltage_value.text = str(round(random.uniform(0.0, 10.0), 2))
         self.temperature_value.text = str(round(random.uniform(20.0, 40.0), 2))
 
@@ -189,6 +190,13 @@ class BMSApp(App):
         new_soc = round(random.uniform(0.0, 100.0), 2)
         self.soc_value.text = str(new_soc) + '%'
         self.soc_progress_bar.value = new_soc
+
+        # Update cell values every second
+        for i, text_input in enumerate(self.left_text_inputs):
+            text_input.text = str(round(random.uniform(3.567, 3.694), 3))
+
+        for i, text_input in enumerate(self.right_text_inputs):
+            text_input.text = str(round(random.uniform(3.567, 3.694), 3))
 
     def open_menu(self, instance):
         # Create the menu layout with buttons
@@ -199,7 +207,8 @@ class BMSApp(App):
         menu_layout.add_widget(dashboard_button)
 
         # Button for setting parameters
-        set_parameters_button = Button(text="Set Parameters", size_hint=(1, 0.5), height=50, on_press=self.show_set_parameters)
+        set_parameters_button = Button(text="Set Parameters", size_hint=(1, 0.5), height=50,
+                                       on_press=self.show_set_parameters)
         menu_layout.add_widget(set_parameters_button)
 
         # Close Button to close the menu popup
@@ -225,8 +234,9 @@ class BMSApp(App):
         # Create a horizontal layout for each parameter (label + input field)
         def create_param_layout(label_text, input_field):
             param_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, spacing=10)
-            label = Label(text=label_text, font_size=30, size_hint=(0.4, 1), bold=True)
+            label = Label(text=label_text, font_size=30, size_hint=(0.3, 1), bold=True)  # Reduced label width
             param_layout.add_widget(label)
+            input_field.size_hint_x = 0.6  # Reduced width for input field (adjust as needed)
             param_layout.add_widget(input_field)
             return param_layout
 
@@ -258,14 +268,18 @@ class BMSApp(App):
         save_button = Button(text="Save Parameters", size_hint=(1, 0.2), on_press=self.save_parameters)
         parameter_layout.add_widget(save_button)
 
-        # Create the popup for setting parameters
-        self.set_parameters_popup = Popup(title="Set Parameters", content=parameter_layout, size_hint=(None, None), size=(1000, 600))
+        # Create the popup for setting parameters with reduced width
+        self.set_parameters_popup = Popup(
+            title="Set Parameters",
+            content=parameter_layout,
+            size_hint=(None, None),
+            size=(2000, 1000)  # Reduced the overall width and height of the popup window
+        )
         self.set_parameters_popup.open()
 
     def save_parameters(self, instance):
-        # Implement saving functionality here
-        print("Parameters saved")
+        # Handle save parameters logic here
+        print("Parameters saved!")
 
-# Run the app
-if __name__ == '__main__':
+if __name__ == "__main__":
     BMSApp().run()
