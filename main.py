@@ -176,7 +176,7 @@ class BMSApp(App):
         main_layout.add_widget(grid_layout)
 
         # Add the image logo to the right side of the main layout
-        logo = Image(source='DCSlogo.jpg', size_hint=(None, None), size=(100, 100))  # Adjust size as needed
+        logo = Image(source='images/DCSlogo.jpg', size_hint=(None, None), size=(100, 100))  # Adjust size as needed
         main_layout.add_widget(logo)
 
         # Schedule the update of random values every 1 second
