@@ -8,8 +8,8 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.slider import Slider
+from kivy.uix.image import Image
 import random
-
 
 class BMSApp(App):
     def build(self):
@@ -174,6 +174,10 @@ class BMSApp(App):
 
         # Add the grid_layout to the main layout
         main_layout.add_widget(grid_layout)
+
+        # Add the image logo to the right side of the main layout
+        logo = Image(source='DCSlogo.jpg', size_hint=(None, None), size=(100, 100))  # Adjust size as needed
+        main_layout.add_widget(logo)
 
         # Schedule the update of random values every 1 second
         Clock.schedule_interval(self.update_values, 1)
