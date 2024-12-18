@@ -8,30 +8,21 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
-from kivy.uix.slider import Slider
+from kivy.uix.floatlayout import FloatLayout
 import random
 import os
 
 
 class BMSApp(App):
     def build(self):
-        # Main layout is BoxLayout to hold title and two sections of grid
-        main_layout = BoxLayout(orientation='vertical', padding=10, spacing=20)
+        # Main layout using FloatLayout to handle positioning of image at the bottom right
+        main_layout = FloatLayout()
+
+        # Create the BoxLayout for other UI elements
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=20)
 
         # Create the top layout to include the menu button and title
         top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=20)
-
-        # Image Path
-        image_path = "images/DCS.png"
-
-        # Check if the image exists
-        if not os.path.exists(image_path):
-            print(f"Image not found at: {image_path}")
-            image_path = "images/default_logo.png"  # Provide a default logo if image is missing
-
-        # Add logo image (the logo will be placed at the left)
-        logo_image = Image(source=image_path, size_hint=(None, None), size=(150, 150))  # Adjust the size as needed
-        top_layout.add_widget(logo_image)
 
         # Menu button that will open the popup
         menu_button = Button(text='Menu', size_hint=(None, None), size=(200, 150), font_size=50,
@@ -42,10 +33,10 @@ class BMSApp(App):
         title = Label(text='5S1P-BMS', size_hint=(1, 0.1), font_size=80, bold=True)
         top_layout.add_widget(title)
 
-        main_layout.add_widget(top_layout)
+        layout.add_widget(top_layout)
 
         # Add a BoxLayout with a fixed height to add space between the title and voltage section
-        main_layout.add_widget(BoxLayout(size_hint_y=None, height=50))  # Adjust height to control the gap
+        layout.add_widget(BoxLayout(size_hint_y=None, height=50))  # Adjust height to control the gap
 
         # Create additional sections for voltage, current, and temperature
         self.current_label = Label(text='Voltage (V):', font_size=40, bold=True)
@@ -78,21 +69,21 @@ class BMSApp(App):
             font_name='Roboto-Bold',
         )
 
-        # Add these new labels and TextInputs to the main layout
+        # Add these new labels and TextInputs to the layout
         current_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=50)
         current_layout.add_widget(self.current_label)
         current_layout.add_widget(self.current_value)
-        main_layout.add_widget(current_layout)
+        layout.add_widget(current_layout)
 
         voltage_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=50)
         voltage_layout.add_widget(self.voltage_label)
         voltage_layout.add_widget(self.voltage_value)
-        main_layout.add_widget(voltage_layout)
+        layout.add_widget(voltage_layout)
 
         temperature_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=50)
         temperature_layout.add_widget(self.temperature_label)
         temperature_layout.add_widget(self.temperature_value)
-        main_layout.add_widget(temperature_layout)
+        layout.add_widget(temperature_layout)
 
         # SOC Label and TextInput
         self.soc_label = Label(text='State of Charge (SOC):', font_size=40, bold=True)
@@ -107,7 +98,7 @@ class BMSApp(App):
         soc_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=50)
         soc_layout.add_widget(self.soc_label)
         soc_layout.add_widget(self.soc_value)
-        main_layout.add_widget(soc_layout)
+        layout.add_widget(soc_layout)
 
         # SOC Progress Bar (representing the charge level)
         self.soc_progress_bar = ProgressBar(
@@ -116,10 +107,9 @@ class BMSApp(App):
             size_hint=(1, 0.05),
             height=80,  # Increased height for the progress bar
         )
-        main_layout.add_widget(self.soc_progress_bar)
+        layout.add_widget(self.soc_progress_bar)
 
         # Create the two sections (7 cells on each side)
-        # Use a horizontal layout to position the two grid sections
         grid_layout = BoxLayout(size_hint=(1, 0.7), spacing=20)
 
         # Create the left section with 7 numerical displays
@@ -186,8 +176,16 @@ class BMSApp(App):
         grid_layout.add_widget(self.left_grid)
         grid_layout.add_widget(self.right_grid)
 
-        # Add the grid_layout to the main layout
-        main_layout.add_widget(grid_layout)
+        # Add the grid_layout to the layout
+        layout.add_widget(grid_layout)
+
+        # Add the layout to the main layout (FloatLayout)
+        main_layout.add_widget(layout)
+
+        # Add an image at the bottom right
+        image = Image(source="images/DCS.png", size_hint=(None, None), size=(200, 200),
+                      pos_hint={"right": 1, "bottom": 0})
+        main_layout.add_widget(image)
 
         # Schedule the update of random values every 1 second
         Clock.schedule_interval(self.update_values, 1)
@@ -234,8 +232,11 @@ class BMSApp(App):
         self.popup.open()
 
     def close_menu(self, instance):
-        # Close the popup
-        self.popup.dismiss()
+        # Close the menu and set parameters popups
+        if hasattr(self, 'popup') and self.popup:
+            self.popup.dismiss()
+        if hasattr(self, 'parameter_popup') and self.parameter_popup:
+            self.parameter_popup.dismiss()
 
     def show_dashboard(self, instance):
         # Handle dashboard button press (you can implement your dashboard logic here)
@@ -262,7 +263,7 @@ class BMSApp(App):
         self.over_voltage_release_input = TextInput(text="4.0", font_size=30, hint_text="Over Voltage Release (V)",
                                                     multiline=False)
         self.under_voltage_input = TextInput(text="3.0", font_size=30, hint_text="Under Voltage (V)", multiline=False)
-        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V)",
+        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V) ",
                                                      multiline=False)
         self.over_temperature_input = TextInput(text="60.0", font_size=30, hint_text="Over Temperature (°C)",
                                                 multiline=False)
@@ -273,6 +274,7 @@ class BMSApp(App):
         self.under_temperature_release_input = TextInput(text="10.0", font_size=30,
                                                          hint_text="Under Temperature Release (°C)", multiline=False)
 
+        # Add all the parameter input layouts
         parameter_layout.add_widget(create_param_layout("Cell No:", self.cell_no_input))
         parameter_layout.add_widget(create_param_layout("Nominal Capacity (Ah):", self.nominal_capacity_input))
         parameter_layout.add_widget(create_param_layout("Over Voltage (V):", self.over_voltage_input))
@@ -286,21 +288,39 @@ class BMSApp(App):
         parameter_layout.add_widget(
             create_param_layout("Under Temperature Release (°C):", self.under_temperature_release_input))
 
-        # Save and Cancel buttons
-        save_button = Button(text="Save", size_hint=(1, 0.2), on_press=self.save_parameters)
-        parameter_layout.add_widget(save_button)
+        # Add Save and Cancel buttons
+        save_button = Button(text="Save", on_press=self.save_parameters, size_hint=(1, 0.2))
+        cancel_button = Button(text="Cancel", on_press=self.close_menu, size_hint=(1, 0.2))
 
-        cancel_button = Button(text="Cancel", size_hint=(1, 0.2), on_press=self.close_menu)
+        parameter_layout.add_widget(save_button)
         parameter_layout.add_widget(cancel_button)
 
-        # Create the popup for setting parameters
+        # Create the popup for parameters and open it
         self.parameter_popup = Popup(title="Set Parameters", content=parameter_layout, size_hint=(None, None),
-                                     size=(1000, 1500))
+                                     size=(1000, 1200))
         self.parameter_popup.open()
 
     def save_parameters(self, instance):
-        # Logic to save the parameters (you can collect the values from the input fields)
-        print("Parameters Saved")
+        # Save the parameter values
+        cell_no = self.cell_no_input.text
+        nominal_capacity = self.nominal_capacity_input.text
+        over_voltage = self.over_voltage_input.text
+        over_voltage_release = self.over_voltage_release_input.text
+        under_voltage = self.under_voltage_input.text
+        under_voltage_release = self.under_voltage_release_input.text
+        over_temperature = self.over_temperature_input.text
+        over_temperature_release = self.over_temperature_release_input.text
+        under_temperature = self.under_temperature_input.text
+        under_temperature_release = self.under_temperature_release_input.text
+
+        print(
+            f"Saved Parameters: \nCell No: {cell_no}\nNominal Capacity: {nominal_capacity} Ah\nOver Voltage: {over_voltage} V"
+            f"\nOver Voltage Release: {over_voltage_release} V\nUnder Voltage: {under_voltage} V"
+            f"\nUnder Voltage Release: {under_voltage_release} V\nOver Temperature: {over_temperature}°C"
+            f"\nOver Temperature Release: {over_temperature_release}°C\nUnder Temperature: {under_temperature}°C"
+            f"\nUnder Temperature Release: {under_temperature_release}°C")
+
+        # Close the parameter popup after saving
         self.parameter_popup.dismiss()
 
 
