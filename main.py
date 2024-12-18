@@ -7,9 +7,11 @@ from kivy.clock import Clock
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
-from kivy.uix.slider import Slider
 from kivy.uix.image import Image
+from kivy.uix.slider import Slider
 import random
+import os
+
 
 class BMSApp(App):
     def build(self):
@@ -18,6 +20,18 @@ class BMSApp(App):
 
         # Create the top layout to include the menu button and title
         top_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=100, spacing=20)
+
+        # Image Path
+        image_path = "images/DCS.png"
+
+        # Check if the image exists
+        if not os.path.exists(image_path):
+            print(f"Image not found at: {image_path}")
+            image_path = "images/default_logo.png"  # Provide a default logo if image is missing
+
+        # Add logo image (the logo will be placed at the left)
+        logo_image = Image(source=image_path, size_hint=(None, None), size=(150, 150))  # Adjust the size as needed
+        top_layout.add_widget(logo_image)
 
         # Menu button that will open the popup
         menu_button = Button(text='Menu', size_hint=(None, None), size=(200, 150), font_size=50,
@@ -175,10 +189,6 @@ class BMSApp(App):
         # Add the grid_layout to the main layout
         main_layout.add_widget(grid_layout)
 
-        # Add the image logo to the right side of the main layout
-        logo = Image(source='images/DCSlogo.jpg', size_hint=(None, None), size=(100, 100))  # Adjust size as needed
-        main_layout.add_widget(logo)
-
         # Schedule the update of random values every 1 second
         Clock.schedule_interval(self.update_values, 1)
 
@@ -246,44 +256,53 @@ class BMSApp(App):
 
         # Add input fields for setting parameters
         self.cell_no_input = TextInput(text="1", font_size=30, hint_text="Cell No", multiline=False)
-        self.nominal_capacity_input = TextInput(text="100.0", font_size=30, hint_text="Nominal Capacity (Ah)", multiline=False)
+        self.nominal_capacity_input = TextInput(text="100.0", font_size=30, hint_text="Nominal Capacity (Ah)",
+                                                multiline=False)
         self.over_voltage_input = TextInput(text="4.2", font_size=30, hint_text="Over Voltage (V)", multiline=False)
-        self.over_voltage_release_input = TextInput(text="4.0", font_size=30, hint_text="Over Voltage Release (V)", multiline=False)
+        self.over_voltage_release_input = TextInput(text="4.0", font_size=30, hint_text="Over Voltage Release (V)",
+                                                    multiline=False)
         self.under_voltage_input = TextInput(text="3.0", font_size=30, hint_text="Under Voltage (V)", multiline=False)
-        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V)", multiline=False)
-        self.over_temperature_input = TextInput(text="60", font_size=30, hint_text="Over Temperature (°C)", multiline=False)
-        self.over_temperature_release_input = TextInput(text="55", font_size=30, hint_text="Over Temperature Release (°C)", multiline=False)
-        self.over_current_input = TextInput(text="10.0", font_size=30, hint_text="Over Current (A)", multiline=False)
-        self.over_current_release_input = TextInput(text="9.0", font_size=30, hint_text="Over Current Release (A)", multiline=False)
+        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V)",
+                                                     multiline=False)
+        self.over_temperature_input = TextInput(text="60.0", font_size=30, hint_text="Over Temperature (°C)",
+                                                multiline=False)
+        self.over_temperature_release_input = TextInput(text="50.0", font_size=30,
+                                                        hint_text="Over Temperature Release (°C)", multiline=False)
+        self.under_temperature_input = TextInput(text="0.0", font_size=30, hint_text="Under Temperature (°C)",
+                                                 multiline=False)
+        self.under_temperature_release_input = TextInput(text="10.0", font_size=30,
+                                                         hint_text="Under Temperature Release (°C)", multiline=False)
 
-        # Add each parameter to the parameter layout with labels on the left
-        parameter_layout.add_widget(create_param_layout("Cell No", self.cell_no_input))
-        parameter_layout.add_widget(create_param_layout("Nominal Capacity (Ah)", self.nominal_capacity_input))
-        parameter_layout.add_widget(create_param_layout("Over Voltage (V)", self.over_voltage_input))
-        parameter_layout.add_widget(create_param_layout("Over Voltage Release (V)", self.over_voltage_release_input))
-        parameter_layout.add_widget(create_param_layout("Under Voltage (V)", self.under_voltage_input))
-        parameter_layout.add_widget(create_param_layout("Under Voltage Release (V)", self.under_voltage_release_input))
-        parameter_layout.add_widget(create_param_layout("Over Temperature (°C)", self.over_temperature_input))
-        parameter_layout.add_widget(create_param_layout("Over Temperature Release (°C)", self.over_temperature_release_input))
-        parameter_layout.add_widget(create_param_layout("Over Current (A)", self.over_current_input))
-        parameter_layout.add_widget(create_param_layout("Over Current Release (A)", self.over_current_release_input))
+        parameter_layout.add_widget(create_param_layout("Cell No:", self.cell_no_input))
+        parameter_layout.add_widget(create_param_layout("Nominal Capacity (Ah):", self.nominal_capacity_input))
+        parameter_layout.add_widget(create_param_layout("Over Voltage (V):", self.over_voltage_input))
+        parameter_layout.add_widget(create_param_layout("Over Voltage Release (V):", self.over_voltage_release_input))
+        parameter_layout.add_widget(create_param_layout("Under Voltage (V):", self.under_voltage_input))
+        parameter_layout.add_widget(create_param_layout("Under Voltage Release (V):", self.under_voltage_release_input))
+        parameter_layout.add_widget(create_param_layout("Over Temperature (°C):", self.over_temperature_input))
+        parameter_layout.add_widget(
+            create_param_layout("Over Temperature Release (°C):", self.over_temperature_release_input))
+        parameter_layout.add_widget(create_param_layout("Under Temperature (°C):", self.under_temperature_input))
+        parameter_layout.add_widget(
+            create_param_layout("Under Temperature Release (°C):", self.under_temperature_release_input))
 
-        # Button to confirm the settings
-        save_button = Button(text="Save Parameters", size_hint=(1, 0.2), on_press=self.save_parameters)
+        # Save and Cancel buttons
+        save_button = Button(text="Save", size_hint=(1, 0.2), on_press=self.save_parameters)
         parameter_layout.add_widget(save_button)
 
-        # Create the popup for setting parameters with reduced width
-        self.set_parameters_popup = Popup(
-            title="Set Parameters",
-            content=parameter_layout,
-            size_hint=(None, None),
-            size=(900, 1000)  # Reduced the overall width and height of the popup window
-        )
-        self.set_parameters_popup.open()
+        cancel_button = Button(text="Cancel", size_hint=(1, 0.2), on_press=self.close_menu)
+        parameter_layout.add_widget(cancel_button)
+
+        # Create the popup for setting parameters
+        self.parameter_popup = Popup(title="Set Parameters", content=parameter_layout, size_hint=(None, None),
+                                     size=(1000, 1500))
+        self.parameter_popup.open()
 
     def save_parameters(self, instance):
-        # Handle save parameters logic here
-        print("Parameters saved!")
+        # Logic to save the parameters (you can collect the values from the input fields)
+        print("Parameters Saved")
+        self.parameter_popup.dismiss()
+
 
 if __name__ == "__main__":
     BMSApp().run()
