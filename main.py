@@ -183,9 +183,9 @@ class BMSApp(App):
         main_layout.add_widget(layout)
 
         # Add an image at the bottom right
-        image = Image(source="images/DCS.png", size_hint=(None, None), size=(200, 200),
-                      pos_hint={"right": 1, "bottom": 0})
-        main_layout.add_widget(image)
+     #   image = Image(source="images/DCS.png", size_hint=(None, None), size=(200, 200),
+     #                 pos_hint={"right": 1, "bottom": 0})
+       # main_layout.add_widget(image)
 
         # Schedule the update of random values every 1 second
         Clock.schedule_interval(self.update_values, 1)
