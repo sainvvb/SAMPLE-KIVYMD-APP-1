@@ -179,13 +179,116 @@ class BMSApp(App):
         # Add the grid_layout to the layout
         layout.add_widget(grid_layout)
 
+        # Initialize the parameters with some default values
+        self.cell_no_value = "1"  # Default Cell Number
+        self.nominal_capacity_value = "100"  # Default Nominal Capacity
+        self.over_voltage_value = "4.2"  # Default Over Voltage
+        self.over_voltage_release_value = "4.1"  # Default Over Voltage Release
+        self.under_voltage_value = "3.0"  # Default Under Voltage
+        self.under_voltage_release_value = "3.1"  # Default Under Voltage Release
+        self.over_temperature_value = "60"  # Default Over Temperature
+        self.over_temperature_release_value = "55"  # Default Over Temperature Release
+        self.under_temperature_value = "-10"  # Default Under Temperature
+        self.under_temperature_release_value = "-5"  # Default Under Temperature Release
+
+        # Label and TextInput for showing the parameters
+        self.cell_no_value_display = TextInput(
+            text=self.cell_no_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.nominal_capacity_value_display = TextInput(
+            text=self.nominal_capacity_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_voltage_value_display = TextInput(
+            text=self.over_voltage_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_voltage_release_value_display = TextInput(
+            text=self.over_voltage_release_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_voltage_value_display = TextInput(
+            text=self.under_voltage_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_voltage_release_value_display = TextInput(
+            text=self.under_voltage_release_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_temperature_value_display = TextInput(
+            text=self.over_temperature_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_temperature_release_value_display = TextInput(
+            text=self.over_temperature_release_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_temperature_value_display = TextInput(
+            text=self.under_temperature_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_temperature_release_value_display = TextInput(
+            text=self.under_temperature_release_value,
+            multiline=False,
+            readonly=True,  # Make the TextInput read-only (no user input)
+            font_size=70,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
         # Add the layout to the main layout (FloatLayout)
         main_layout.add_widget(layout)
 
         # Add an image at the bottom right
-     #   image = Image(source="images/DCS.png", size_hint=(None, None), size=(200, 200),
-     #                 pos_hint={"right": 1, "bottom": 0})
-       # main_layout.add_widget(image)
+        image = Image(source="images/DCS.png", size_hint=(None, None), size=(200, 200),
+                      pos_hint={"right": 1, "bottom": 0})
+        main_layout.add_widget(image)
 
         # Schedule the update of random values every 1 second
         Clock.schedule_interval(self.update_values, 1)
@@ -255,26 +358,87 @@ class BMSApp(App):
             param_layout.add_widget(input_field)
             return param_layout
 
-        # Add input fields for setting parameters
-        self.cell_no_input = TextInput(text="1", font_size=30, hint_text="Cell No", multiline=False)
-        self.nominal_capacity_input = TextInput(text="100.0", font_size=30, hint_text="Nominal Capacity (Ah)",
-                                                multiline=False)
-        self.over_voltage_input = TextInput(text="4.2", font_size=30, hint_text="Over Voltage (V)", multiline=False)
-        self.over_voltage_release_input = TextInput(text="4.0", font_size=30, hint_text="Over Voltage Release (V)",
-                                                    multiline=False)
-        self.under_voltage_input = TextInput(text="3.0", font_size=30, hint_text="Under Voltage (V)", multiline=False)
-        self.under_voltage_release_input = TextInput(text="3.2", font_size=30, hint_text="Under Voltage Release (V) ",
-                                                     multiline=False)
-        self.over_temperature_input = TextInput(text="60.0", font_size=30, hint_text="Over Temperature (°C)",
-                                                multiline=False)
-        self.over_temperature_release_input = TextInput(text="50.0", font_size=30,
-                                                        hint_text="Over Temperature Release (°C)", multiline=False)
-        self.under_temperature_input = TextInput(text="0.0", font_size=30, hint_text="Under Temperature (°C)",
-                                                 multiline=False)
-        self.under_temperature_release_input = TextInput(text="10.0", font_size=30,
-                                                         hint_text="Under Temperature Release (°C)", multiline=False)
+        # Create the input fields for all parameters including temperature values
+        self.cell_no_input = TextInput(
+            text=self.cell_no_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
 
-        # Add all the parameter input layouts
+        self.nominal_capacity_input = TextInput(
+            text=self.nominal_capacity_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_voltage_input = TextInput(
+            text=self.over_voltage_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_voltage_release_input = TextInput(
+            text=self.over_voltage_release_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_voltage_input = TextInput(
+            text=self.under_voltage_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_voltage_release_input = TextInput(
+            text=self.under_voltage_release_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_temperature_input = TextInput(
+            text=self.over_temperature_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.over_temperature_release_input = TextInput(
+            text=self.over_temperature_release_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_temperature_input = TextInput(
+            text=self.under_temperature_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
+        self.under_temperature_release_input = TextInput(
+            text=self.under_temperature_release_value,  # Set default value from current value
+            multiline=False,
+            font_size=30,
+            halign='center',
+            font_name='Roboto-Bold',
+        )
+
         parameter_layout.add_widget(create_param_layout("Cell No:", self.cell_no_input))
         parameter_layout.add_widget(create_param_layout("Nominal Capacity (Ah):", self.nominal_capacity_input))
         parameter_layout.add_widget(create_param_layout("Over Voltage (V):", self.over_voltage_input))
@@ -301,24 +465,17 @@ class BMSApp(App):
         self.parameter_popup.open()
 
     def save_parameters(self, instance):
-        # Save the parameter values
-        cell_no = self.cell_no_input.text
-        nominal_capacity = self.nominal_capacity_input.text
-        over_voltage = self.over_voltage_input.text
-        over_voltage_release = self.over_voltage_release_input.text
-        under_voltage = self.under_voltage_input.text
-        under_voltage_release = self.under_voltage_release_input.text
-        over_temperature = self.over_temperature_input.text
-        over_temperature_release = self.over_temperature_release_input.text
-        under_temperature = self.under_temperature_input.text
-        under_temperature_release = self.under_temperature_release_input.text
-
-        print(
-            f"Saved Parameters: \nCell No: {cell_no}\nNominal Capacity: {nominal_capacity} Ah\nOver Voltage: {over_voltage} V"
-            f"\nOver Voltage Release: {over_voltage_release} V\nUnder Voltage: {under_voltage} V"
-            f"\nUnder Voltage Release: {under_voltage_release} V\nOver Temperature: {over_temperature}°C"
-            f"\nOver Temperature Release: {over_temperature_release}°C\nUnder Temperature: {under_temperature}°C"
-            f"\nUnder Temperature Release: {under_temperature_release}°C")
+        # Update the parameter values with the values from the input fields
+        self.cell_no_value = self.cell_no_input.text
+        self.nominal_capacity_value = self.nominal_capacity_input.text
+        self.over_voltage_value = self.over_voltage_input.text
+        self.over_voltage_release_value = self.over_voltage_release_input.text
+        self.under_voltage_value = self.under_voltage_input.text
+        self.under_voltage_release_value = self.under_voltage_release_input.text
+        self.over_temperature_value = self.over_temperature_input.text
+        self.over_temperature_release_value = self.over_temperature_release_input.text
+        self.under_temperature_value = self.under_temperature_input.text
+        self.under_temperature_release_value = self.under_temperature_release_input.text
 
         # Close the parameter popup after saving
         self.parameter_popup.dismiss()
